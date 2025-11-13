@@ -1,44 +1,4 @@
-<?php
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['idToken']) || !isset($_SESSION['email'])) {
-    header('Location: login.php');
-    exit;
-}
-
-// Get user information from session
-$userName = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : 'Student';
-$userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
-
-// Generate avatar initials from name
-$avatarInitials = 'U';
-if (!empty($userName)) {
-    $nameParts = explode(' ', $userName);
-    if (count($nameParts) >= 2) {
-        $avatarInitials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
-    } else {
-        $avatarInitials = strtoupper(substr($userName, 0, 2));
-    }
-}
-
-// --- LOGOUT FUNCTION ---
-if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-    session_unset();
-    session_destroy();
-    header('Location: login.php'); // redirect after logout
-    exit;
-}
-?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Student Dashboard — BSU</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    :root{
-      --red: #c9413b;
+d: #c9413b;
       --bg: #f5f6f8;
       --card: #fff;
       --muted: #7a7a7a;
@@ -92,30 +52,67 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     .nav-item .ico{width:28px;height:28px;border-radius:6px;background:#eef2ff;display:grid;place-items:center;flex-shrink:0}
 
     .content{flex:1;}
-    .main-grid{display:grid;grid-template-columns:1fr 1fr 320px;gap:20px}
+    
+    /* === NEW: Main Grid Layout === */
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 320px;
+      gap:20px;
+    }
+    .welcome-card {
+      grid-column: 1 / 3; /* Span first two columns */
+    }
+    .right-sidebar {
+      grid-column: 3 / 4;
+      grid-row: 1 / 3; /* Span two rows */
+    }
+    /* section 3 (Announcements) and 4 (Class) will flow into row 2, col 1 and col 2 */
+    
     
     /* === CARDS === */
     .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,0.04);margin-bottom:12px}
     .card:last-child{margin-bottom:0}
     h3{margin-bottom:12px;font-size:16px;font-weight:600}
 
-    /* === COLLAPSIBLE SECTIONS === */
+    /* === NEW: Card Header Flex (for 'Class' card) === */
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px; /* Replaces h3 margin */
+    }
+    .card-header-flex h3 {
+      margin-bottom: 0; /* Remove default margin from h3 */
+    }
+    .card-header-flex .btn-add {
+      margin-top: 0; /* Remove default margin from button */
+    }
+
+
+    /* === COLLAPSIBLE SECTIONS (Only for 'Pending Activities') === */
     .collapsible-header{
       display:flex;align-items:center;justify-content:space-between;cursor:pointer;
       padding:8px 0;user-select:none;
     }
     .collapsible-header h3{margin:0;flex:1}
+    /* UPDATED: Smaller icon */
     .collapsible-icon{
-      width:24px;height:24px;display:grid;place-items:center;
+      width:20px;
+      height:20px;
+      font-size: 16px; /* Makes the '▼' character smaller */
+      display:grid;
+      place-items:center;
       transition:transform 0.3s ease;color:var(--muted);
     }
     .collapsible-section.active .collapsible-icon{transform:rotate(180deg)}
     .collapsible-content{
-      max-height:0;overflow:hidden;transition:max-height 0.3s ease;
-      padding-top:0;
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.3s ease;
     }
     .collapsible-section.active .collapsible-content{
-      max-height:1000px;padding-top:12px;
+      max-height:1000px;
+      padding-top:12px; /* Content padding only when open */
     }
     .collapsible-content p{color:var(--muted);margin:0}
     .collapsible-content *{overflow:visible;word-wrap:break-word}
@@ -157,7 +154,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     footer{margin-top:20px;padding:12px;text-align:center;color:var(--muted);font-size:12px}
   </style>
 </head>
-<body>
+<!-- NOTE: The class="student" on body is what scopes the styles -->
+<body class="student">
 
   <!-- === TOP BAR === -->
   <div class="topbar">
@@ -186,7 +184,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
         <div class="avatar"><?php echo htmlspecialchars($avatarInitials); ?></div>
 
         <div class="dropdown" id="profileDropdown">
-          <a href="#">View Profile</a>
+          <a href="ViewProfileStudent.php">View Profile</a>
           <a href="?action=logout" class="logout">Logout</a>
         </div>
       </div>
@@ -203,51 +201,21 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     </aside>
 
     <main class="content">
+      <!-- NEW: Grid Layout -->
       <div class="main-grid">
-        <!-- LEFT SECTION: Welcome -->
-        <section>
+      
+        <!-- ITEM 1: Welcome Card (Spans 2 cols) -->
+        <section class="welcome-card">
           <div class="card">
-            <h3>Welcome to your Dashboard</h3>
-            <p style="color:var(--muted)">This is your overview panel. You can access announcements, classes, enrollment, and activities here.</p>
-          </div>
-          <footer>
-            © <?php echo date('Y'); ?> Batangas State University
-          </footer>
-        </section>
-
-        <!-- MIDDLE SECTION: Announcements & Class -->
-        <section>
-          <!-- Announcements -->
-          <div class="card collapsible-section" id="announcements-section">
-            <div class="collapsible-header" onclick="toggleCollapsible('announcements-section')">
-              <h3>Announcements & News</h3>
-              <div class="collapsible-icon">▼</div>
-            </div>
-            <div class="collapsible-content">
-              <p style="color:var(--muted);margin-bottom:8px">Check for latest updates and important notices.</p>
-              <div class="status-indicator no-data">
-                No announcements available at this time.
-              </div>
-            </div>
-          </div>
-
-          <!-- Class -->
-          <div class="card collapsible-section" id="class-section">
-            <div class="collapsible-header" onclick="toggleCollapsible('class-section')">
-              <h3>Class</h3>
-              <div class="collapsible-icon">▼</div>
-            </div>
-            <div class="collapsible-content">
-              <p style="color:var(--muted);margin-bottom:8px">Manage your enrolled classes.</p>
-              <div class="status-indicator">
-                You have not enrolled in any class yet.
-              </div>
-              <button class="btn-add" onclick="window.location.href='#'">+ Add Class</button>
-            </div>
+            <!-- UPDATED: Welcome Message -->
+            <h3>Welcome to Student Dashboard, <?php echo htmlspecialchars($userName); ?>!</h3>
+            <p style="color:var(--muted); margin-top: 4px;">
+              From here, you can manage your classes, check for announcements, enroll in new courses, and track your activities.
+            </p>
           </div>
         </section>
 
-        <!-- RIGHT SECTION: Calendar, Time, Pending Activities -->
+        <!-- ITEM 2: Right Sidebar (Spans 2 rows) -->
         <aside class="right-sidebar">
           <!-- Calendar -->
           <div class="calendar-card">
@@ -262,7 +230,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
             <div class="time-label">Local Time</div>
           </div>
 
-          <!-- Pending Activities -->
+          <!-- Pending Activities (Still Collapsible) -->
           <div class="card collapsible-section" id="activities-section">
             <div class="collapsible-header" onclick="toggleCollapsible('activities-section')">
               <h3>Pending Activities</h3>
@@ -276,7 +244,39 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
             </div>
           </div>
         </aside>
-      </div>
+
+        <!-- ITEM 3: Announcements (Row 2, Col 1) -->
+        <section>
+          <!-- UPDATED: Not collapsible -->
+          <div class="card" id="announcements-section">
+            <h3>Announcements & News</h3>
+            <p style="color:var(--muted);margin-bottom:8px">Check for latest updates and important notices.</p>
+            <div class="status-indicator no-data">
+              No announcements available at this time.
+            </div>
+          </div>
+        </section>
+
+        <!-- ITEM 4: Class (Row 2, Col 2) -->
+        <section>
+          <!-- UPDATED: Not collapsible, button moved -->
+          <div class="card" id="class-section">
+            <div class="card-header-flex">
+              <h3>Class</h3>
+              <button class="btn-add" onclick="window.location.href='#'">+ Add Class</button>
+            </div>
+            <p style="color:var(--muted);margin-bottom:8px">Manage your enrolled classes.</p>
+            <div class="status-indicator">
+              You have not enrolled in any class yet.
+            </div>
+          </div>
+        </section>
+
+      </div> <!-- End .main-grid -->
+      
+      <footer>
+        © <?php echo date('Y'); ?> Batangas State University
+      </footer>
     </main>
   </div>
 
@@ -301,30 +301,20 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   });
   document.addEventListener('click', () => dropdown.style.display = 'none');
 
-  // Collapsible sections - close previous one before opening new one
-  let activeSection = null;
+  // UPDATED: Collapsible sections
   function toggleCollapsible(sectionId) {
     const section = document.getElementById(sectionId);
-    
-    // If clicking the same section, just toggle it
-    if (section.classList.contains('active')) {
-      section.classList.remove('active');
-      activeSection = null;
-    } else {
-      // Close the previously active section first
-      if (activeSection && activeSection !== section) {
-        activeSection.classList.remove('active');
-      }
-      // Open the clicked section
-      section.classList.add('active');
-      activeSection = section;
+    if (section) {
+      // Just toggle the active class on the clicked section
+      section.classList.toggle('active');
     }
   }
 
   // Time updater
   function updateTime() {
     const t = new Date();
-    document.getElementById('timeNow').innerText = t.toLocaleString();
+    // Using a more standard time format
+    document.getElementById('timeNow').innerText = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
   setInterval(updateTime, 1000);
   updateTime();
