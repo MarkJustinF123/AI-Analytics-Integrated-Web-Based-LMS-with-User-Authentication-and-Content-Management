@@ -1,4 +1,45 @@
-d: #c9413b;
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['idToken']) || !isset($_SESSION['email'])) {
+    header('Location: login.php');
+    exit;
+}
+
+// Get user information from session
+$userName = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : 'Student';
+$userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+
+// Generate avatar initials from name
+$avatarInitials = 'U';
+if (!empty($userName)) {
+    $nameParts = explode(' ', $userName);
+    if (count($nameParts) >= 2) {
+        $avatarInitials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+    } else {
+        $avatarInitials = strtoupper(substr($userName, 0, 2));
+    }
+}
+
+// --- LOGOUT FUNCTION ---
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    session_unset();
+    session_destroy();
+    header('Location: login.php'); // redirect after logout
+    exit;
+}
+?>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Student Dashboard — BSU</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  
+  <style>
+    :root{
+      --red: #c9413b;
       --bg: #f5f6f8;
       --card: #fff;
       --muted: #7a7a7a;
@@ -154,10 +195,8 @@ d: #c9413b;
     footer{margin-top:20px;padding:12px;text-align:center;color:var(--muted);font-size:12px}
   </style>
 </head>
-<!-- NOTE: The class="student" on body is what scopes the styles -->
 <body class="student">
 
-  <!-- === TOP BAR === -->
   <div class="topbar">
     <div class="left-area">
       <div class="hamburger" id="hamburger">
@@ -191,7 +230,6 @@ d: #c9413b;
     </div>
   </div>
 
-  <!-- === MAIN BODY === -->
   <div class="page">
     <aside class="sidebar" id="sidebar">
       <a href="#" class="nav-item"><div class="ico">🏠</div><div>Dashboard</div></a>
@@ -201,13 +239,10 @@ d: #c9413b;
     </aside>
 
     <main class="content">
-      <!-- NEW: Grid Layout -->
       <div class="main-grid">
       
-        <!-- ITEM 1: Welcome Card (Spans 2 cols) -->
         <section class="welcome-card">
           <div class="card">
-            <!-- UPDATED: Welcome Message -->
             <h3>Welcome to Student Dashboard, <?php echo htmlspecialchars($userName); ?>!</h3>
             <p style="color:var(--muted); margin-top: 4px;">
               From here, you can manage your classes, check for announcements, enroll in new courses, and track your activities.
@@ -215,22 +250,18 @@ d: #c9413b;
           </div>
         </section>
 
-        <!-- ITEM 2: Right Sidebar (Spans 2 rows) -->
         <aside class="right-sidebar">
-          <!-- Calendar -->
           <div class="calendar-card">
             <h3>Calendar</h3>
             <div id="miniCalendar"></div>
           </div>
 
-          <!-- Time -->
           <div class="time-card">
             <h3>Current Time</h3>
             <div class="time-display" id="timeNow"></div>
             <div class="time-label">Local Time</div>
           </div>
 
-          <!-- Pending Activities (Still Collapsible) -->
           <div class="card collapsible-section" id="activities-section">
             <div class="collapsible-header" onclick="toggleCollapsible('activities-section')">
               <h3>Pending Activities</h3>
@@ -245,9 +276,7 @@ d: #c9413b;
           </div>
         </aside>
 
-        <!-- ITEM 3: Announcements (Row 2, Col 1) -->
         <section>
-          <!-- UPDATED: Not collapsible -->
           <div class="card" id="announcements-section">
             <h3>Announcements & News</h3>
             <p style="color:var(--muted);margin-bottom:8px">Check for latest updates and important notices.</p>
@@ -257,9 +286,7 @@ d: #c9413b;
           </div>
         </section>
 
-        <!-- ITEM 4: Class (Row 2, Col 2) -->
         <section>
-          <!-- UPDATED: Not collapsible, button moved -->
           <div class="card" id="class-section">
             <div class="card-header-flex">
               <h3>Class</h3>
@@ -272,9 +299,7 @@ d: #c9413b;
           </div>
         </section>
 
-      </div> <!-- End .main-grid -->
-      
-      <footer>
+      </div> <footer>
         © <?php echo date('Y'); ?> Batangas State University
       </footer>
     </main>
