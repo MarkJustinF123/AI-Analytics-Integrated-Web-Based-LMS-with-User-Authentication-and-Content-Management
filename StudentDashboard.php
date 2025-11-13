@@ -56,8 +56,27 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       position:sticky;top:0;z-index:100;
     }
     .left-area{display:flex;align-items:center;gap:12px}
-    .hamburger{width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
-    .bar{width:18px;height:2px;background:#fff;margin:3px 0}
+    
+    /* UPDATED: Smaller hamburger icon */
+    .hamburger{
+      width:30px; /* Was 36px */
+      height:30px; /* Was 36px */
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .hamburger:hover {
+      background: rgba(0,0,0,0.1);
+    }
+    .bar{
+      width:16px; /* Was 18px */
+      height:2px;
+      background:#fff;
+      margin:2px 0; /* Was 3px */
+    }
+    
     .logo{height:40px;width:40px;border-radius:6px;background:#fff;padding:2px}
     .title{font-weight:600}
     .subtitle{font-size:12px;color:rgba(255,255,255,0.85)}
@@ -81,20 +100,27 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
     /* === MAIN LAYOUT === */
     .page{display:flex;gap:20px;padding:20px;align-items:flex-start}
+    
+    /* RE-ADDED: Collapsible sidebar styles */
     .sidebar{
       width:var(--sidebar-w);background:var(--card);border-radius:10px;padding:16px;
       box-shadow:0 4px 12px rgba(0,0,0,0.04);min-height:calc(100vh - 72px);
       transition:width 0.3s;
     }
-    .sidebar.collapsed{width:72px}
-    .sidebar.collapsed .nav-item div:not(.ico){display:none}
+    .sidebar.collapsed{
+      width:72px;
+    }
+    .sidebar.collapsed .nav-item div:not(.ico){
+      display:none;
+    }
+    
     .nav-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;color:#222;text-decoration:none;margin-bottom:8px}
     .nav-item:hover{background:#f4f6fb}
     .nav-item .ico{width:28px;height:28px;border-radius:6px;background:#eef2ff;display:grid;place-items:center;flex-shrink:0}
 
     .content{flex:1;}
     
-    /* === NEW: Main Grid Layout === */
+    /* === Main Grid Layout === */
     .main-grid{
       display:grid;
       grid-template-columns:1fr 1fr 320px;
@@ -107,56 +133,27 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       grid-column: 3 / 4;
       grid-row: 1 / 3; /* Span two rows */
     }
-    /* section 3 (Announcements) and 4 (Class) will flow into row 2, col 1 and col 2 */
-    
     
     /* === CARDS === */
     .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,0.04);margin-bottom:12px}
     .card:last-child{margin-bottom:0}
     h3{margin-bottom:12px;font-size:16px;font-weight:600}
 
-    /* === NEW: Card Header Flex (for 'Class' card) === */
+    /* === Card Header Flex (for 'Class' card) === */
     .card-header-flex {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px; /* Replaces h3 margin */
+      margin-bottom: 12px;
     }
     .card-header-flex h3 {
-      margin-bottom: 0; /* Remove default margin from h3 */
+      margin-bottom: 0;
     }
     .card-header-flex .btn-add {
-      margin-top: 0; /* Remove default margin from button */
+      margin-top: 0;
     }
 
-
-    /* === COLLAPSIBLE SECTIONS (Only for 'Pending Activities') === */
-    .collapsible-header{
-      display:flex;align-items:center;justify-content:space-between;cursor:pointer;
-      padding:8px 0;user-select:none;
-    }
-    .collapsible-header h3{margin:0;flex:1}
-    /* UPDATED: Smaller icon */
-    .collapsible-icon{
-      width:20px;
-      height:20px;
-      font-size: 16px; /* Makes the '▼' character smaller */
-      display:grid;
-      place-items:center;
-      transition:transform 0.3s ease;color:var(--muted);
-    }
-    .collapsible-section.active .collapsible-icon{transform:rotate(180deg)}
-    .collapsible-content{
-      max-height:0;
-      overflow:hidden;
-      transition:max-height 0.3s ease;
-    }
-    .collapsible-section.active .collapsible-content{
-      max-height:1000px;
-      padding-top:12px; /* Content padding only when open */
-    }
-    .collapsible-content p{color:var(--muted);margin:0}
-    .collapsible-content *{overflow:visible;word-wrap:break-word}
+    /* REMOVED: .collapsible-* CSS rules */
 
     /* === INDICATORS === */
     .status-indicator{
@@ -245,7 +242,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
           <div class="card">
             <h3>Welcome to Student Dashboard, <?php echo htmlspecialchars($userName); ?>!</h3>
             <p style="color:var(--muted); margin-top: 4px;">
-              From here, you can manage your classes, check for announcements, enroll in new courses, and track your activities.
+              Welcome aboard! Your entire student life is organized right here. Dive into your classes, mark your calendar, and let's make this a fantastic school year. We're thrilled to have you as a part of the Red Spartans!
             </p>
           </div>
         </section>
@@ -262,19 +259,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
             <div class="time-label">Local Time</div>
           </div>
 
-          <div class="card collapsible-section" id="activities-section">
-            <div class="collapsible-header" onclick="toggleCollapsible('activities-section')">
-              <h3>Pending Activities</h3>
-              <div class="collapsible-icon">▼</div>
-            </div>
-            <div class="collapsible-content">
-              <p style="color:var(--muted);margin-bottom:8px">View your pending assignments and tasks.</p>
-              <div class="status-indicator no-data">
-                No pending activities at this time.
-              </div>
-            </div>
-          </div>
-        </aside>
+          </aside>
 
         <section>
           <div class="card" id="announcements-section">
@@ -306,10 +291,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   </div>
 
 <script>
-  // Sidebar toggle
+  // RE-ADDED: Sidebar toggle script
   const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
-  hamburger.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
 
   // Notification badge (for demo only)
   document.getElementById('notifBtn').addEventListener('click', () => {
@@ -326,19 +313,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   });
   document.addEventListener('click', () => dropdown.style.display = 'none');
 
-  // UPDATED: Collapsible sections
-  function toggleCollapsible(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      // Just toggle the active class on the clicked section
-      section.classList.toggle('active');
-    }
-  }
+  // REMOVED: toggleCollapsible function
 
   // Time updater
   function updateTime() {
     const t = new Date();
-    // Using a more standard time format
     document.getElementById('timeNow').innerText = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
   setInterval(updateTime, 1000);
