@@ -57,10 +57,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     }
     .left-area{display:flex;align-items:center;gap:12px}
     
-    /* UPDATED: Smaller hamburger icon */
+    /* UPDATED: Compact hamburger icon */
     .hamburger{
-      width:30px; /* Was 36px */
-      height:30px; /* Was 36px */
+      width:24px; /* Smaller clickable area */
+      height:24px;
       display:grid;
       place-items:center;
       cursor:pointer;
@@ -71,10 +71,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       background: rgba(0,0,0,0.1);
     }
     .bar{
-      width:16px; /* Was 18px */
-      height:2px;
-      background:#fff;
-      margin:2px 0; /* Was 3px */
+      width: 10px;  /* Short bars */
+      height: 2px;
+      background: #fff;
+      margin: 1px 0; /* Tightly stacked */
     }
     
     .logo{height:40px;width:40px;border-radius:6px;background:#fff;padding:2px}
@@ -101,7 +101,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     /* === MAIN LAYOUT === */
     .page{display:flex;gap:20px;padding:20px;align-items:flex-start}
     
-    /* RE-ADDED: Collapsible sidebar styles */
+    /* Collapsible sidebar styles */
     .sidebar{
       width:var(--sidebar-w);background:var(--card);border-radius:10px;padding:16px;
       box-shadow:0 4px 12px rgba(0,0,0,0.04);min-height:calc(100vh - 72px);
@@ -127,11 +127,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       gap:20px;
     }
     .welcome-card {
-      grid-column: 1 / 3; /* Span first two columns */
+      grid-column: 1 / 3;
     }
     .right-sidebar {
       grid-column: 3 / 4;
-      grid-row: 1 / 3; /* Span two rows */
+      grid-row: 1 / 3;
     }
     
     /* === CARDS === */
@@ -153,7 +153,34 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       margin-top: 0;
     }
 
-    /* REMOVED: .collapsible-* CSS rules */
+    /* RE-ADDED: Collapsible rules for "Pending Activities" */
+    .collapsible-header{
+      display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+      padding: 4px 0; /* Reduced vertical padding */
+      user-select:none;
+    }
+    .collapsible-header h3{margin:0;flex:1}
+    .collapsible-icon{
+      width:20px;
+      height:20px;
+      font-size: 16px; 
+      display:grid;
+      place-items:center;
+      transition:transform 0.3s ease;color:var(--muted);
+    }
+    .collapsible-section.active .collapsible-icon{transform:rotate(180deg)}
+    .collapsible-content{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.3s ease;
+    }
+    .collapsible-section.active .collapsible-content{
+      max-height:1000px;
+      padding-top:12px; 
+    }
+    .collapsible-content p{color:var(--muted);margin:0}
+    .collapsible-content *{overflow:visible;word-wrap:break-word}
+
 
     /* === INDICATORS === */
     .status-indicator{
@@ -258,8 +285,21 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
             <div class="time-display" id="timeNow"></div>
             <div class="time-label">Local Time</div>
           </div>
-
-          </aside>
+          
+          <div class="card collapsible-section" id="activities-section">
+            <div class="collapsible-header" onclick="toggleCollapsible('activities-section')">
+              <h3>Pending Activities</h3>
+              <div class="collapsible-icon">▼</div>
+            </div>
+            <div class="collapsible-content">
+              <p style="color:var(--muted);margin-bottom:8px">View your pending assignments and tasks.</p>
+              <div class="status-indicator no-data">
+                No pending activities at this time.
+              </div>
+            </div>
+          </div>
+          
+        </aside>
 
         <section>
           <div class="card" id="announcements-section">
@@ -291,7 +331,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   </div>
 
 <script>
-  // RE-ADDED: Sidebar toggle script
+  // Sidebar toggle script
   const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   hamburger.addEventListener('click', () => {
@@ -313,7 +353,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   });
   document.addEventListener('click', () => dropdown.style.display = 'none');
 
-  // REMOVED: toggleCollapsible function
+  // RE-ADDED: toggleCollapsible function
+  function toggleCollapsible(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.classList.toggle('active');
+    }
+  }
 
   // Time updater
   function updateTime() {
