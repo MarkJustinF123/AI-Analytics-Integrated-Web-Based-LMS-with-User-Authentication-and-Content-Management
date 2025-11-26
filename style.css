@@ -20,7 +20,6 @@ h2 {
   position: relative;
 }
 
-/* Logo styling for auth forms */
 .brand-logo {
   width: 80px;
   height: 80px;
@@ -104,7 +103,6 @@ p {
   color: #555;
 }
 
-/* Forgot form helper text in white */
 #forgot-form p {
   color: #fff;
 }
@@ -119,17 +117,15 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Auth form utility rows */
 .error {
   color: #ff0000;
   font-size: 13px;
   font-style: italic;
   text-align: left;
   margin: 4px 0 6px 2px;
-  min-height: 2px; /* reserve small space; grows when text appears */
+  min-height: 2px;
 }
 
-/* Center-align only the role error beneath the select */
 #regRoleError {
   text-align: center;
   margin-left: 0;
@@ -140,7 +136,6 @@ a:hover {
   margin-bottom: 4px;
 }
 
-/* Password input wrapper with eye icon */
 .password-wrapper {
   position: relative;
   width: 100%;
@@ -194,7 +189,7 @@ form button {
   max-width: 320px;
   align-self: center;
   border-radius: 20px;
-  margin-top: 4px; /* keep button close; errors will push it slightly */
+  margin-top: 4px;
 }
 
 .auth-row {

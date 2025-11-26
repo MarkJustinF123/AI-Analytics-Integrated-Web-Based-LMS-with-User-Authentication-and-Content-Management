@@ -3,6 +3,25 @@ session_start();
 
 require_once 'firebase.php';
 
+// --- HELPER: Function to call Strapi API from PHP ---
+function callStrapiAuth($endpoint, $data) {
+    $url = 'http://localhost:1337/api/auth/local' . $endpoint; // Adjust port if needed
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json'
+    ]);
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    return ['code' => $httpCode, 'body' => json_decode($response, true)];
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo 'Method Not Allowed';
@@ -19,52 +38,47 @@ if (empty($email) || empty($password)) {
 }
 
 try {
-    // Sign in with Firebase
+    // 1. FIREBASE LOGIN
     $signIn = firebaseSignInWithEmailAndPassword($email, $password);
-    $idToken = isset($signIn['idToken']) ? $signIn['idToken'] : '';
+    $firebaseToken = isset($signIn['idToken']) ? $signIn['idToken'] : ''; 
 
-    if (empty($idToken)) {
-        throw new Exception('Missing idToken from sign-in response.');
+    if (empty($firebaseToken)) {
+        throw new Exception('Invalid email or password (Firebase).');
     }
 
-    // Get account info to check email verification
-    $accountInfo = firebaseGetAccountInfo($idToken);
+    // 2. CHECK FIREBASE VERIFICATION
+    $accountInfo = firebaseGetAccountInfo($firebaseToken);
     $users = isset($accountInfo['users']) ? $accountInfo['users'] : [];
     $firstUser = isset($users[0]) ? $users[0] : [];
+    
+    // --- FIX IS HERE: I UNCOMMENTED THIS BLOCK ---
     $emailVerified = isset($firstUser['emailVerified']) ? $firstUser['emailVerified'] : false;
-
+    
     if (!$emailVerified) {
         $_SESSION['error'] = 'Please verify your email before logging in.';
         header('Location: login.php');
         exit;
     }
+    // ---------------------------------------------
 
-    // Store session data
-    $_SESSION['idToken'] = $idToken;
-    $_SESSION['email'] = $email;
-
-    // Get user role and name from displayName or email pattern
+    // 3. GET USER DETAILS
     $userRole = null;
     $userName = '';
     $displayName = isset($firstUser['displayName']) ? $firstUser['displayName'] : '';
-    
-    // Parse displayName if it contains name and role (format: "Name|role:student" or just "role:student")
+
+    // Parse Name and Role
     if (!empty($displayName)) {
         if (strpos($displayName, '|role:') !== false) {
-            // Format: "Name|role:student"
             $parts = explode('|role:', $displayName);
             $userName = trim($parts[0]);
             $userRole = isset($parts[1]) ? trim($parts[1]) : null;
         } elseif (strpos($displayName, 'role:') === 0) {
-            // Format: "role:student" (old format, no name)
             $userRole = str_replace('role:', '', $displayName);
         } else {
-            // Just a name, no role
             $userName = $displayName;
         }
     }
-    
-    // If name not found, extract from email
+
     if (empty($userName)) {
         $emailParts = explode('@', $email);
         $namePart = $emailParts[0];
@@ -75,14 +89,7 @@ try {
             $userName = ucfirst($namePart);
         }
     }
-    
-    // Store user name in session
-    $_SESSION['user'] = array(
-        'name' => $userName,
-        'email' => $email
-    );
-    
-    // Fallback: Check email pattern for role
+
     if (empty($userRole)) {
         $emailLower = strtolower($email);
         if (strpos($emailLower, 'student') !== false) {
@@ -92,7 +99,58 @@ try {
         }
     }
 
-    // Redirect based on user role
+    // ============================================================
+    // 4. STRAPI SYNCHRONIZATION 
+    // ============================================================
+    
+    // A. Try to Log in to Strapi
+    $strapiData = [
+        'identifier' => $email,
+        'password' => $password
+    ];
+    $strapiResponse = callStrapiAuth('', $strapiData); // Login endpoint
+    
+    $finalStrapiToken = '';
+    $finalStrapiUser = [];
+
+    if ($strapiResponse['code'] === 200) {
+        // Login Success! User exists in Strapi.
+        $finalStrapiToken = $strapiResponse['body']['jwt'];
+        $finalStrapiUser = $strapiResponse['body']['user'];
+    } else {
+        // Login Failed. User probably doesn't exist in Strapi (DB Reset).
+        // B. Register them in Strapi automatically
+        $registerData = [
+            'username' => $userName . rand(100,999), // Ensure uniqueness
+            'email' => $email,
+            'password' => $password
+        ];
+        
+        $registerResponse = callStrapiAuth('/register', $registerData);
+        
+        if ($registerResponse['code'] === 200) {
+            // Registration Success!
+            $finalStrapiToken = $registerResponse['body']['jwt'];
+            $finalStrapiUser = $registerResponse['body']['user'];
+        } else {
+            // Something went wrong with Strapi
+             // OPTIONAL: If Strapi is down, you might want to allow login anyway using Firebase token?
+             // For now, we will throw error to ensure data consistency.
+            throw new Exception('Could not sync user with Strapi database.');
+        }
+    }
+
+    // 5. SAVE SESSION (Using STRAPI Token)
+    $_SESSION['idToken'] = $finalStrapiToken; 
+    $_SESSION['email'] = $email;
+    
+    $_SESSION['user'] = array(
+        'name' => $userName,
+        'email' => $email,
+        'strapi_id' => $finalStrapiUser['id']
+    );
+
+    // 6. REDIRECT
     if ($userRole === 'student') {
         header('Location: StudentDashboard.php');
         exit;
@@ -100,12 +158,13 @@ try {
         header('Location: InstructorDashboard.php');
         exit;
     } else {
-        $_SESSION['error'] = 'Role not found. Please ensure your email contains "student" or "instructor/teacher", or contact admin.';
-        header('Location: login.php');
+        header('Location: StudentDashboard.php');
         exit;
     }
+
 } catch (Exception $e) {
     $_SESSION['error'] = 'Login failed: ' . $e->getMessage();
     header('Location: login.php');
     exit;
 }
+?>

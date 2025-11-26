@@ -1,11 +1,7 @@
 <?php
 
-// Firebase Web API key
 define('FIREBASE_API_KEY', 'AIzaSyBqNqITm_sOk2C8JMfwqDOnXiFqSePkGn8');
 
-/**
- * Sign in a user with email and password using Firebase
- */
 function firebaseSignInWithEmailAndPassword($email, $password) {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' . FIREBASE_API_KEY;
     
@@ -25,9 +21,6 @@ function firebaseSignInWithEmailAndPassword($email, $password) {
     return $result;
 }
 
-/**
- * Get account information using idToken
- */
 function firebaseGetAccountInfo($idToken) {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' . FIREBASE_API_KEY;
     
@@ -45,9 +38,6 @@ function firebaseGetAccountInfo($idToken) {
     return $result;
 }
 
-/**
- * Send HTTP POST request with JSON data
- */
 function firebaseHttpPostJson($url, $jsonData) {
     $ch = curl_init($url);
     
@@ -84,9 +74,6 @@ function firebaseHttpPostJson($url, $jsonData) {
     return $response;
 }
 
-/**
- * Create a new user account (sign up)
- */
 function firebaseSignUp($email, $password) {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' . FIREBASE_API_KEY;
     
@@ -106,9 +93,6 @@ function firebaseSignUp($email, $password) {
     return $result;
 }
 
-/**
- * Send email verification
- */
 function firebaseSendEmailVerification($idToken) {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=' . FIREBASE_API_KEY;
     
@@ -125,9 +109,6 @@ function firebaseSendEmailVerification($idToken) {
     }
 }
 
-/**
- * Send password reset email
- */
 function firebaseSendPasswordReset($email, $continueUrl = '') {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=' . FIREBASE_API_KEY;
     
@@ -148,9 +129,6 @@ function firebaseSendPasswordReset($email, $continueUrl = '') {
     }
 }
 
-/**
- * Update user profile (displayName) using idToken
- */
 function firebaseUpdateProfile($idToken, $displayName) {
     $endpoint = 'https://identitytoolkit.googleapis.com/v1/accounts:update?key=' . FIREBASE_API_KEY;
     

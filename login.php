@@ -84,7 +84,7 @@
     </script>
   <?php endif; ?>
   <form id="loginForm" method="POST" action="Authentication.php" novalidate>
-    <img src="images/Batangas_State_Logo.png" alt="Batangas State University" class="brand-logo" />
+    <img src="images/bsu_logo.png" alt="Batangas State University" class="brand-logo" />
     <h2>Login</h2>
 
     <div class="form-field">
@@ -115,11 +115,9 @@
     <button type="submit">Login</button>
     <p class="below-btn">Don't have an account? <a href="register.php">Register here</a></p>
   </form>
-
-  <!-- Client-side Firebase login removed in favor of PHP server-side handler. -->
   
   <script>
-    // Password visibility click handler
+
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
@@ -131,13 +129,12 @@
         
         const isPassword = passwordInput.type === 'password';
         passwordInput.type = isPassword ? 'text' : 'password';
-        
-        // Update icon based on visibility
+
         if (isPassword) {
-          // Show password - display eye-slash icon
+
           eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
         } else {
-          // Hide password - display eye icon
+
           eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
         }
       });
@@ -145,4 +142,3 @@
   </script>
 </body>
 </html>
-

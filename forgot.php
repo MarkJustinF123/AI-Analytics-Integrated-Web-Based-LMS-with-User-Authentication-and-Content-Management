@@ -68,7 +68,7 @@
   <?php endif; ?>
 
   <form id="forgot-form" method="POST" action="forgot.php">
-    <img src="images/Batangas_State_Logo.png" alt="Batangas State University" class="brand-logo" />
+    <img src="images/bsu_logo.png" alt="Batangas State University" class="brand-logo" />
     <h2>Forgot Password</h2>
     <p>Please enter your registered email address to reset your password.</p>
     <input type="email" id="email" name="email" placeholder="Email" required />
