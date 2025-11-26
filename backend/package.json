@@ -1,5 +1,5 @@
 {
-  "name": "cms-strapi",
+  "name": "strapi",
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
@@ -18,7 +18,7 @@
     "@strapi/plugin-cloud": "5.31.0",
     "@strapi/plugin-users-permissions": "5.31.0",
     "@strapi/strapi": "5.31.0",
-    "better-sqlite3": "11.3.0",
+    "better-sqlite3": "12.4.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
@@ -31,11 +31,11 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
+    "node": ">=20.0.0 <=24.x.x",
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "25fd0d70-2db6-4120-9b83-9cafff75f011",
-    "installId": "7b579bbe316fe91c6b940d1a7db1714680a4c6311f1f7c607d0a7e9e2b54e991"
+    "uuid": "c1210ab7-c751-4cf1-b544-4e88f47c87d0",
+    "installId": "f2f695bb8a7ff78d96840369a9d0e270b6ae1f88767b05616fdb089fc68fcc6e"
   }
 }

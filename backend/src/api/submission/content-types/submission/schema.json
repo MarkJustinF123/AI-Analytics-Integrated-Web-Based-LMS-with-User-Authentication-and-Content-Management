@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "submissions",
+  "info": {
+    "singularName": "submission",
+    "pluralName": "submissions",
+    "displayName": "Submission"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content": {
+      "type": "text"
+    },
+    "file": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "ai_feedback": {
+      "type": "text"
+    },
+    "assignment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::assignment.assignment"
+    },
+    "submission_status": {
+      "type": "enumeration",
+      "enum": [
+        "draft",
+        "submitted",
+        "graded"
+      ]
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "grade": {
+      "type": "integer"
+    },
+    "analytics_insight": {
+      "type": "text"
+    }
+  }
+}
