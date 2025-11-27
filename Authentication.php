@@ -5,7 +5,7 @@ require_once 'firebase.php';
 
 // --- HELPER: Function to call Strapi API from PHP ---
 function callStrapiAuth($endpoint, $data) {
-    $url = 'http://localhost:1337/api/auth/local' . $endpoint; // Adjust port if needed
+    $url = 'https://radiant-sharing-ce036a9ad5.strapiapp.com/' . $endpoint; // Adjust port if needed
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
