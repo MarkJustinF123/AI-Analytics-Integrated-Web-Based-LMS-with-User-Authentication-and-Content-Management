@@ -104,41 +104,37 @@ try {
     // ============================================================
     
     // A. Try to Log in to Strapi
-    $strapiData = [
-        'identifier' => $email,
+$strapiData = [
+    'identifier' => $email,
+    'password' => $password
+];
+$strapiResponse = callStrapiAuth('api/auth/local', $strapiData);
+
+$finalStrapiToken = '';
+$finalStrapiUser = [];
+
+if ($strapiResponse['code'] === 200) {
+    // Login Success! User exists in Strapi.
+    $finalStrapiToken = $strapiResponse['body']['jwt'];
+    $finalStrapiUser = $strapiResponse['body']['user'];
+} else {
+    // Login Failed - Try register
+    $registerData = [
+        'username' => $userName . rand(100,999),
+        'email' => $email,
         'password' => $password
     ];
-    $strapiResponse = callStrapiAuth('', $strapiData); // Login endpoint
-    
-    $finalStrapiToken = '';
-    $finalStrapiUser = [];
 
-    if ($strapiResponse['code'] === 200) {
-        // Login Success! User exists in Strapi.
-        $finalStrapiToken = $strapiResponse['body']['jwt'];
-        $finalStrapiUser = $strapiResponse['body']['user'];
+    $registerResponse = callStrapiAuth('api/auth/local/register', $registerData); 
+
+    if ($registerResponse['code'] === 200) {
+        $finalStrapiToken = $registerResponse['body']['jwt'];
+        $finalStrapiUser = $registerResponse['body']['user'];
     } else {
-        // Login Failed. User probably doesn't exist in Strapi (DB Reset).
-        // B. Register them in Strapi automatically
-        $registerData = [
-            'username' => $userName . rand(100,999), // Ensure uniqueness
-            'email' => $email,
-            'password' => $password
-        ];
-        
-        $registerResponse = callStrapiAuth('/register', $registerData);
-        
-        if ($registerResponse['code'] === 200) {
-            // Registration Success!
-            $finalStrapiToken = $registerResponse['body']['jwt'];
-            $finalStrapiUser = $registerResponse['body']['user'];
-        } else {
-            // Something went wrong with Strapi
-             // OPTIONAL: If Strapi is down, you might want to allow login anyway using Firebase token?
-             // For now, we will throw error to ensure data consistency.
-            throw new Exception('Could not sync user with Strapi database.');
-        }
+        throw new Exception('Could not sync user with Strapi database.');
     }
+}
+
 
     // 5. SAVE SESSION (Using STRAPI Token)
     $_SESSION['idToken'] = $finalStrapiToken; 
