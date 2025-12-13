@@ -1,0 +1,798 @@
+/* === Google Classroom UI --- dashboard2.css === */
+:root {
+  --gg-bg: #f5f6f8; /* Classroom's light gray background */
+  --gg-card: #ffffff; /* Card background */
+  --gg-primary-text: #3c4043;
+  --gg-secondary-text: #5f6368;
+  --gg-border: #e0e0e0;
+  --gg-accent: #dc3545; /* Changed to a standard Bootstrap Red */
+  --gg-header: #ffffff;
+  --gg-school-red: #8b0000; /* A deep, institutional red for headers/accents */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'Google Sans', Arial, sans-serif;
+}
+body {
+  background: var(--gg-bg);
+  color: var(--gg-primary-text);
+}
+
+/* === Top Header === */
+.header {
+  height: 64px;
+  background: var(--gg-header);
+  border-bottom: 1px solid var(--gg-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-menu, .header-icon-btn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--gg-secondary-text);
+}
+.header-menu:hover, .header-icon-btn:hover {
+  background: #f1f3f4;
+}
+.header-title {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gg-school-red); /* Avatar background */
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.profile {
+  position: relative;
+}
+.dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: var(--gg-card);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  display: none;
+  padding: 8px;
+  min-width: 160px;
+}
+.dropdown a {
+  display: block;
+  padding: 8px;
+  border-radius: 6px;
+  color: #111;
+  text-decoration: none;
+}
+.dropdown a:hover {
+  background: #f2f2f2;
+}
+.dropdown a.logout {
+  color: var(--gg-secondary-text);
+}
+
+/* === Main Page Layout === */
+.page-container {
+  display: flex;
+}
+
+/* === Sidebar === */
+.sidebar {
+  width: 280px;
+  padding-top: 8px;
+  background: var(--gg-header);
+  min-height: calc(100vh - 64px);
+  border-right: 1px solid var(--gg-border);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 24px;
+  text-decoration: none;
+  color: var(--gg-primary-text);
+  font-weight: 500;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+.nav-item.active, .nav-item:hover {
+  background: #fbe9e7; /* Light red for active/hover */
+  color: var(--gg-school-red); /* Text color changes to school red */
+}
+.nav-item-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--gg-secondary-text);
+}
+.nav-item.active .nav-item-icon {
+  color: var(--gg-school-red); /* Icon color changes to school red */
+}
+
+/* === Main Content Area === */
+.content-area {
+  flex: 1;
+  padding: 24px;
+}
+.content-header {
+  margin-bottom: 24px;
+}
+
+/* === Class Grid === */
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.class-card {
+  background: var(--gg-card);
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.class-card-header {
+  background-color: var(--gg-school-red); /* Course card header color */
+  padding: 16px;
+  min-height: 100px;
+  position: relative;
+}
+.class-card-header h3 {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.class-card-header h3 a {
+  color: #fff;
+  text-decoration: none;
+}
+.class-card-header h3 a:hover {
+  text-decoration: underline;
+}
+.class-card-header span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.class-card-teacher {
+  padding: 16px;
+  font-size: 13px;
+  color: var(--gg-secondary-text);
+  flex-grow: 1;
+}
+.class-card-footer {
+  border-top: 1px solid var(--gg-border);
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.class-card-footer a {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--gg-secondary-text);
+  text-decoration: none;
+  border-radius: 50%;
+}
+.class-card-footer a:hover {
+  background: #f1f3f4;
+}
+
+/* Fallback for no courses */
+#class-grid-container p {
+  font-size: 16px;
+  color: var(--gg-secondary-text);
+}
+
+/* --- NEW STYLES for 'manage-course.php' --- */
+
+/* The big red header banner */
+.course-header {
+  background-color: var(--gg-school-red);
+  color: white;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 0;
+  position: relative;
+}
+.course-header h1 {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  margin: 0;
+}
+.course-header p {
+  font-size: 18px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* The tab navigation bar */
+.course-nav-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--gg-border);
+  background: var(--gg-header);
+}
+.course-nav-tabs .tab-link {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--gg-secondary-text);
+  text-decoration: none;
+  padding: 16px 24px;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+.course-nav-tabs .tab-link.active {
+  color: var(--gg-school-red);
+  border-bottom-color: var(--gg-school-red);
+}
+
+/* The tab content panes */
+.tab-content {
+  padding-top: 24px;
+}
+.tab-pane {
+  display: none; /* Hidden by default */
+}
+.tab-pane.active {
+  display: block; /* Shown when active */
+}
+
+/* Styles for forms inside the cards */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: Poppins, Arial, sans-serif;
+  font-size: 14px;
+}
+.form-group textarea {
+  min-height: 120px;
+}
+.card hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+
+/* --- Re-adding styles from dashboard.css that were used in manage-course.php --- */
+.course-list {
+  list-style: none;
+  margin-top: 16px;
+  padding: 0;
+}
+.course-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f4f6fb;
+  margin-bottom: 8px;
+}
+.course-list-item strong {
+  color: #333;
+}
+
+.btn-add {
+  background: var(--gg-accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-add:hover {
+  background: #c9302c; /* Darker red on hover */
+}
+
+/* --- NEW STYLES for Classwork "+ Create" Button --- */
+.create-button {
+  background: var(--gg-accent);
+  color: #fff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.create-button:hover {
+  background: #c9302c; /* Darker red on hover */
+}
+
+.create-menu {
+  position: relative;
+  display: inline-block; /* Aligns menu properly */
+  margin-bottom: 24px;
+}
+
+.create-dropdown {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 100%; /* Position below the button */
+  left: 0;
+  background: var(--gg-card);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  min-width: 220px;
+  z-index: 10;
+  padding: 8px;
+}
+
+.create-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--gg-primary-text);
+  font-weight: 500;
+}
+.create-dropdown-item:hover {
+  background: #f1f3f4;
+}
+.create-dropdown-item .material-icons {
+  color: var(--gg-secondary-text);
+}
+
+/* --- NEW STYLES for 'create-assignment.php' --- */
+.assignment-header {
+  height: 64px;
+  background: var(--gg-header);
+  border-bottom: 1px solid var(--gg-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.assignment-header .header-left {
+  gap: 24px;
+}
+.assignment-header .header-title {
+  font-size: 20px;
+}
+.assignment-header .back-link {
+  color: var(--gg-secondary-text);
+  text-decoration: none;
+}
+.assign-button {
+  background: var(--gg-accent);
+  color: #fff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+.assign-button:hover {
+  background: #c9302c;
+}
+.assign-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.assignment-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.assignment-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.assignment-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.form-card {
+  background: var(--gg-card);
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  padding: 24px;
+}
+.form-card h3 {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.form-input-group {
+  position: relative;
+  margin-bottom: 16px;
+}
+.form-input-group textarea,
+.form-input-group input {
+  width: 100%;
+  border: none;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+}
+.form-input-group textarea:focus,
+.form-input-group input:focus {
+  border-bottom-color: var(--gg-accent);
+  border-bottom-width: 2px;
+}
+.form-input-group textarea {
+  min-height: 120px;
+  margin-top: 16px;
+}
+.form-input-group label {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  color: var(--gg-secondary-text);
+  transition: all 0.2s;
+  pointer-events: none;
+}
+.form-input-group input:focus + label,
+.form-input-group input:not(:placeholder-shown) + label {
+  top: -10px;
+  font-size: 12px;
+  color: var(--gg-accent);
+}
+.file-attach-btn {
+  background: #f1f3f4;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.file-attach-btn:hover {
+  background: #e9ebee;
+}
+#file-list {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--gg-secondary-text);
+}
+
+/* --- NEW STYLES for Expandable Assignments --- */
+.assignment-item {
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden; /* Ensures radius is kept */
+}
+.assignment-item-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  cursor: pointer;
+  background: var(--gg-card);
+  border-bottom: 1px solid var(--gg-border);
+}
+.assignment-item-header:hover {
+  background: #f1f3f4;
+}
+.assignment-item-header .material-icons {
+  color: var(--gg-secondary-text);
+}
+.assignment-item-header strong {
+  flex-grow: 1; /* Pushes date to the right */
+  font-size: 15px;
+  color: var(--gg-primary-text);
+}
+.assignment-item-header .posted-date {
+  font-size: 13px;
+  color: var(--gg-secondary-text);
+}
+.assignment-item-content {
+  display: none; /* Hidden by default */
+  background: #f8f9fa; /* Slightly different background */
+  padding: 24px;
+  border-top: 1px solid var(--gg-border);
+}
+.assignment-item-content.show {
+  display: block; /* Show when toggled */
+}
+.assignment-item-content p {
+  color: var(--gg-primary-text);
+  margin-bottom: 16px;
+}
+.attachment-list {
+  list-style: none;
+  padding: 0;
+}
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-card);
+  margin-bottom: 8px;
+}
+.attachment-item a {
+  text-decoration: none;
+  color: var(--gg-primary-text);
+  font-weight: 500;
+}
+
+/* --- NEW STYLES for Assignment Sidebar --- */
+.form-select-group {
+  margin-bottom: 20px;
+}
+.form-select-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gg-primary-text);
+  margin-bottom: 8px;
+  display: block;
+}
+.form-select-group select,
+.form-select-group input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: var(--gg-bg);
+  border-radius: 4px 4px 0 0;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+}
+.form-select-group input[type="text"]:focus,
+.form-select-group select:focus {
+  border-bottom: 2px solid var(--gg-accent);
+  outline: none;
+}
+.btn-outline {
+  width: 100%;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-outline:hover {
+  background: #f1f3f4;
+}
+
+/* --- NEW STYLES for 'view-assignment.php' --- */
+
+/* Header for the assignment view page */
+.assignment-detail-header {
+  padding: 24px;
+  background: var(--gg-header);
+  border-bottom: 1px solid var(--gg-border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.assignment-detail-header .icon-bg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gg-school-red);
+  color: white;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.assignment-detail-header h2 {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+  flex-grow: 1;
+}
+.assignment-detail-header .posted-date {
+  font-size: 13px;
+  color: var(--gg-secondary-text);
+  flex-shrink: 0; /* Prevents wrapping */
+}
+
+/* Tabs for "Instructions" and "Student Work" */
+.assignment-detail-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--gg-border);
+  background: var(--gg-header);
+}
+.assignment-detail-tabs .detail-tab-link {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--gg-secondary-text);
+  text-decoration: none;
+  padding: 16px 24px;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+.assignment-detail-tabs .detail-tab-link.active {
+  color: var(--gg-school-red);
+  border-bottom-color: var(--gg-school-red);
+}
+
+/* Layout for the tab content */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Stats for "Student Work" tab */
+.student-work-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+  border-bottom: 1px solid var(--gg-border);
+}
+.stat-item {
+  text-align: center;
+}
+.stat-item .count {
+  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--gg-school-red);
+}
+.stat-item .label {
+  font-size: 13px;
+  color: var(--gg-secondary-text);
+}
+
+/* --- NEW FIX: Remove blue link color from stream/classwork items --- */
+.assignment-item-header,
+.assignment-item-header:visited {
+  color: var(--gg-primary-text); /* Uses the main text color */
+  text-decoration: none;
+}
+
+.assignment-item-header:hover {
+  background-color: #f1f3f4;
+  color: var(--gg-primary-text); /* Keeps text color the same on hover */
+}
+
+/* --- NEW STYLE for Collapsible Sidebar --- */
+.nav-item.collapsible-header {
+  border-bottom: 1px solid var(--gg-border);
+  margin-bottom: 0;
+  padding-bottom: 10px;
+}
+.nav-item.collapsible-header:hover {
+  background: transparent; /* Disable background hover for the header */
+}
+
+/* --- NEW STYLES for 3-Dot Menu --- */
+.item-menu {
+  position: relative;
+  margin-left: auto; /* Pushes menu to the far right */
+}
+
+.item-menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--gg-secondary-text);
+}
+.item-menu-btn:hover {
+  background: #f1f3f4;
+}
+
+.item-dropdown {
+  display: none;
+  position: absolute;
+  top: 40px; /* Position below the button */
+  right: 0;
+  background: var(--gg-card);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  min-width: 120px;
+  z-index: 10;
+  padding: 8px;
+  border: 1px solid var(--gg-border);
+}
+
+.item-dropdown-link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--gg-primary-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+.item-dropdown-link:hover {
+  background: #f1f3f4;
+}
+.item-dropdown-link.delete {
+  color: var(--gg-accent);
+}

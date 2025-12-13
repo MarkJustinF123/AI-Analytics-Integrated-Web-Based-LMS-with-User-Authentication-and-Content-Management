@@ -1,0 +1,287 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('images/log_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+h2 {
+  position: relative;
+}
+
+.brand-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px auto;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(229, 57, 53, 0.18);
+}
+
+
+form {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15), 0 6px 18px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  width: 100%;
+  max-width: 400px;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #b71c1c;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.65);
+  color: #222;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #e53935;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.15);
+  background: #fff;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(180deg, #ff5252 0%, #e53935 100%);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+  box-shadow: 0 8px 18px rgba(229, 57, 53, 0.35);
+}
+
+button:hover {
+  background: linear-gradient(180deg, #ff3b3b 0%, #c62828 100%);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+p {
+  margin-top: 15px;
+  color: #555;
+}
+
+#forgot-form p {
+  color: #fff;
+}
+
+a {
+  color: #c62828;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #ff0000;
+  font-size: 13px;
+  font-style: italic;
+  text-align: left;
+  margin: 4px 0 6px 2px;
+  min-height: 2px;
+}
+
+#regRoleError {
+  text-align: center;
+  margin-left: 0;
+  display: block;
+}
+
+.form-field {
+  margin-bottom: 4px;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+  width: 100%;
+  padding-right: 40px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 0;
+  bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #666;
+  transition: color 0.2s;
+  z-index: 10;
+  width: 20px;
+  height: auto;
+  margin: 0;
+}
+
+.password-toggle:hover {
+  color: #e53935;
+}
+
+.password-toggle:focus {
+  outline: none;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.form button,
+form button {
+  width: 85%;
+  max-width: 320px;
+  align-self: center;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 12px 0;
+  font-size: 14px;
+}
+
+.auth-row .remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.auth-row .remember input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  transform: translateY(7px);
+  accent-color: #e53935;
+}
+
+.auth-row .forgot,
+.auth-row .forgot:visited {
+  color: #d71010;
+}
+.auth-row .forgot:hover {
+  color: #e53935;
+}
+
+.below-btn {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.below-btn a,
+.below-btn a:visited {
+  color: #d71010;
+}
+.below-btn a:hover {
+  color: #e53935;
+}
+
+@media (max-width: 480px) {
+  form {
+    padding: 2rem 1.5rem;
+    min-height: 400px;
+  }
+}
+
+body.instructor,
+body.student {
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+body.instructor {
+  background: #fff3e0;
+}
+
+body.student {
+  background: #e3f2fd;
+}
+
+.box {
+  background: white;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+body.instructor button,
+body.student button {
+  margin-top: 1em;
+  padding: 10px;
+  background: #d71010;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+body.instructor button:hover,
+body.student button:hover {
+  background: #d32f2f;
+}
